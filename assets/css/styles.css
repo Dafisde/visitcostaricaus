@@ -1,0 +1,68 @@
+/* 🌙 Modo Oscuro */
+body.dark-mode {
+    background-color: #222;
+    color: #fff;
+}
+
+/* Corregimos la navegación en modo oscuro */
+body.dark-mode header {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Ajustamos la sección de encabezado */
+body.dark-mode .hero {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Botón en modo oscuro */
+body.dark-mode .button {
+    background: #f8b400;
+    color: black;
+}
+
+body.dark-mode .button:hover {
+    background: #d18f00;
+}
+
+/* Mejoramos el estilo del botón de modo oscuro */
+#toggle-dark-mode {
+    background: #fff;
+    color: black;
+    padding: 8px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s ease-in-out;
+}
+
+#toggle-dark-mode:hover {
+    background: #f8b400;
+}
+
+body.dark-mode #toggle-dark-mode {
+    background: #333;
+    color: white;
+}
+
+body.dark-mode #toggle-dark-mode:hover {
+    background: #f8b400;
+}
+
+/* Modo oscuro en formulario */
+body.dark-mode #reservas {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Corregimos los inputs y selects en modo oscuro */
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+    background: #333;
+    color: #fff;
+    border: 1px solid #555;
+}
+
+body.dark-mode input::placeholder, 
+body.dark-mode textarea::placeholder {
+    color: #bbb;
+}

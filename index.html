@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visit Costa Rica US</title>
+    
+    <!-- Carga optimizada de estilos -->
+    <link rel="stylesheet" href="assets/css/styles.min.css">
+
+    <!-- Scripts optimizados -->
+    <script src="assets/js/multilenguaje.min.js" defer></script>
+    <script src="assets/js/validacion.min.js" defer></script>
+</head>
+<body>
+
+<!-- Navegación Fija -->
+<header>
+    <nav>
+        <a href="#reservas">Reservas</a>
+        <a href="#rutas-populares">Rutas Populares</a>
+        <a href="#testimonios">Testimonios</a>
+        <a href="#contacto">Contacto</a>
+    </nav>
+
+    <!-- Botón de Modo Oscuro -->
+    <button id="toggle-dark-mode">🌙 Modo Oscuro</button>
+
+    <!-- Selector de Idioma -->
+    <select id="language-selector">
+        <option value="es">🇪🇸 Español</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="pt">🇧🇷 Português</option>
+        <option value="fr">🇫🇷 Français</option>
+    </select>
+</header>
+
+<!-- Sección de Encabezado -->
+<section id="inicio" class="hero">
+    <h1 id="form-title">Visit Costa Rica US</h1>
+    <p id="form-description">Explora Costa Rica con nuestros servicios de transporte premium</p>
+    <a href="#reservas" id="reserve-button" class="button">Reservar Ahora</a>
+</section>
+
+<!-- Sección de Reservas con mejoras -->
+<section id="reservas">
+    <h2>Reserva tu Transfer</h2>
+    <form id="form-reservas">
+        
+        <!-- Campo Nombre -->
+        <label for="nombre">Nombre Completo:</label>
+        <input type="text" id="nombre" name="nombre" required placeholder="Tu Nombre">
+        
+        <!-- Campo Correo Electrónico con validación -->
+        <label for="email">Correo Electrónico:</label>
+        <input type="email" id="email" name="email" required placeholder="correo@ejemplo.com"
+               pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+        
+        <!-- Campo Teléfono con selección de país y validación numérica -->
+        <label for="telefono">Número de Teléfono:</label>
+        <div style="display: flex; gap: 5px;">
+            <select id="codigo-pais" name="codigo-pais" required>
+                <option value="+1">🇺🇸 +1 (Estados Unidos)</option>
+                <option value="+506">🇨🇷 +506 (Costa Rica)</option>
+                <option value="+52">🇲🇽 +52 (México)</option>
+                <option value="+54">🇦🇷 +54 (Argentina)</option>
+                <option value="+55">🇧🇷 +55 (Brasil)</option>
+                <option value="+57">🇨🇴 +57 (Colombia)</option>
+                <option value="+34">🇪🇸 +34 (España)</option>
+                <option value="+44">🇬🇧 +44 (Reino Unido)</option>
+                <option value="+49">🇩🇪 +49 (Alemania)</option>
+                <option value="+33">🇫🇷 +33 (Francia)</option>
+                <option value="+39">🇮🇹 +39 (Italia)</option>
+                <option value="+61">🇦🇺 +61 (Australia)</option>
+                <option value="+81">🇯🇵 +81 (Japón)</option>
+                <option value="+86">🇨🇳 +86 (China)</option>
+                <option value="+91">🇮🇳 +91 (India)</option>
+                <option value="+7">🇷🇺 +7 (Rusia)</option>
+                <option value="+82">🇰🇷 +82 (Corea del Sur)</option>
+                <option value="+27">🇿🇦 +27 (Sudáfrica)</option>
+                <option value="+20">🇪🇬 +20 (Egipto)</option>
+                <option value="+62">🇮🇩 +62 (Indonesia)</option>
+                <option value="+66">🇹🇭 +66 (Tailandia)</option>
+                <option value="+971">🇦🇪 +971 (Emiratos Árabes Unidos)</option>
+                <option value="+98">🇮🇷 +98 (Irán)</option>
+            </select>
+            <input type="tel" id="telefono" name="telefono" required placeholder="Número de Teléfono"
+                   pattern="[0-9]{6,15}" title="Ingresa solo números (mínimo 6, máximo 15 dígitos)">
+        </div>
+        
+        <!-- Campo Origen -->
+        <label for="origen">Origen:</label>
+        <select id="origen" name="origen" required>
+            <option value="playas-del-coco">Playas del Coco</option>
+            <option value="aeropuerto-liberia">Aeropuerto de Liberia</option>
+        </select>
+        
+        <!-- Campo Destino -->
+        <label for="destino">Destino:</label>
+        <select id="destino" name="destino" required>
+            <option value="san-jose">San José</option>
+            <option value="playa-tamarindo">Playa Tamarindo</option>
+        </select>
+        
+        <!-- Campo Fecha -->
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
+        
+        <!-- Checkbox de consentimiento -->
+        <label>
+            <input type="checkbox" id="consentimiento" name="consentimiento" required>
+            Autorizo ser contactado por correo y WhatsApp para promociones y confirmación.
+        </label>
+        
+        <p id="precio" style="font-size: 1.2rem; margin-top: 1rem;"></p>
+        
+        <button type="submit" class="button">Reservar</button>
+    </form>
+    <p id="error-msg" style="color: red; display: none;"></p>
+</section>
+
+<!-- Carga optimizada de scripts -->
+<script src="assets/js/multilenguaje.js" defer></script>
+<script src="assets/js/validacion.js" defer></script>
+
+</body>
+</html>

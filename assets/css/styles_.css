@@ -1,0 +1,216 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    scroll-behavior: smooth;
+    background-image: url('../images/Fondo.webp'); /* Fondo global */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: white;
+    text-align: center;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    background-color: rgba(46, 139, 87, 0.9);
+    padding: 1rem;
+    z-index: 10;
+}
+
+nav a {
+    color: white;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.hero {
+    padding: 5rem 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    background-color: #FFA500;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #FF8C00;
+}
+
+#error-msg {
+    color: red;
+    margin-top: 1rem;
+}
+
+codigo viejo
+
+
+/* Importación de fuentes modernas */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Poppins:wght@300;400;700&display=swap');
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Fondo fijo con imagen */
+body {
+    background: url('../images/Fondo.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    text-align: center;
+}
+
+/* Navegación Fija */
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 1rem 0;
+    z-index: 1000;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+nav a:hover {
+    color: #f8b400;
+    transform: scale(1.1);
+}
+
+/* Sección de Encabezado */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+/* Botón Animado */
+.button {
+    background: #f8b400;
+    color: #000;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s ease-in-out;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background: #d18f00;
+    transform: scale(1.1);
+}
+
+/* Sección de Reservas */
+#reservas {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 40px 20px;
+    margin-top: 50px;
+    border-radius: 10px;
+}
+
+#reservas h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+label {
+    font-size: 1.2rem;
+}
+
+select, input[type="date"] {
+    width: 80%;
+    max-width: 400px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+button[type="submit"] {
+    width: 80%;
+    max-width: 400px;
+    padding: 12px;
+    background: #f8b400;
+    color: black;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+button[type="submit"]:hover {
+    background: #d18f00;
+    transform: scale(1.05);
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    select, input[type="date"], button[type="submit"] {
+        width: 90%;
+    }
+}
