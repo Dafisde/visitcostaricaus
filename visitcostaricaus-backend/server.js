@@ -1,21 +1,21 @@
 // server.js - Backend con Express y Twilio para enviar WhatsApp
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const whatsappRoutes = require('./routes/whatsapp');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const whatsappRoutes = require("./routes/whatsapp");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Se usa la variable de entorno de Railway
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
 // Rutas
-app.use('/send-whatsapp', whatsappRoutes);
+app.use("/api", whatsappRoutes);
 
 // Iniciar servidor
-app.listen(port, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
