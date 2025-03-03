@@ -62,7 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
+        event.preventDefault(); // Evita el envío por defecto
+
         let errores = [];
 
         if (nombre.value.trim() === "") {
@@ -90,11 +92,42 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (errores.length > 0) {
-            event.preventDefault();
             errorMsg.innerHTML = errores.join("<br>");
             errorMsg.style.display = "block";
+            return;
         } else {
             errorMsg.style.display = "none";
+        }
+
+        // 📌 Enviar la información al backend en Railway
+        const reservaData = {
+            nombre: nombre.value,
+            email: email.value,
+            telefono: telefono.value,
+            origen: origen.value,
+            destino: destino.value,
+            fecha: fecha.value
+        };
+
+        try {
+            const response = await fetch("https://visitcostaricaus-production.up.railway.app/api/send-whatsapp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(reservaData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert("✅ Reserva enviada con éxito. Recibirás un mensaje de confirmación por WhatsApp.");
+            } else {
+                alert(`❌ Error al enviar la reserva: ${result.error}`);
+            }
+        } catch (error) {
+            console.error("❌ Error al conectar con la API:", error);
+            alert("❌ Ocurrió un error al enviar la reserva. Inténtalo nuevamente.");
         }
     });
 
