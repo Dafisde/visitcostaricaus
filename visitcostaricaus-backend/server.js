@@ -13,12 +13,12 @@ app.use(bodyParser.json());
 // Rutas
 app.use("/api", whatsappRoutes);
 
-// Ruta de prueba para Railway
+// 🔥 Mantener activo Railway con una ruta raíz
 app.get("/", (req, res) => {
-    res.send("🚀 Backend funcionando en Railway");
+    res.send("🚀 Backend funcionando en Railway - Prueba de tráfico");
 });
 
 // Iniciar servidor
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => { // 🔥 Asegurar que escuche en Railway
     console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
 });
