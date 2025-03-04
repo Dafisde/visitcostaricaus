@@ -14,23 +14,31 @@ router.post("/send-whatsapp", async (req, res) => {
             return res.status(400).json({ error: "Todos los campos son obligatorios." });
         }
 
+        // Verificar si TWILIO_TEMPLATE_SID está definido
+        if (!process.env.TWILIO_TEMPLATE_SID) {
+            console.error("❌ TWILIO_TEMPLATE_SID no está definido en .env");
+            return res.status(500).json({ error: "Error de configuración en el servidor." });
+        }
+
         // Formatear el número con código internacional si no lo tiene
         let formattedPhone = telefono.startsWith("+") ? telefono : `+${telefono}`;
 
         console.log(`📩 Enviando mensaje a: ${formattedPhone}`);
-        
-        // Enviar mensaje al cliente usando la plantilla aprobada con content SID
+        console.log(`🔹 Usando plantilla: ${process.env.TWILIO_TEMPLATE_SID}`);
+
+        // Enviar mensaje al cliente usando la plantilla aprobada
         const responseUser = await client.messages.create({
+            messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID, // ID del servicio de mensajería en Twilio
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
             to: `whatsapp:${formattedPhone}`,
             contentSid: process.env.TWILIO_TEMPLATE_SID, // Asegurar que esta variable está en .env
             contentVariables: JSON.stringify({
-                1: nombre,
-                2: email,
-                3: telefono,
-                4: origen,
-                5: destino,
-                6: fecha
+                "1": nombre,
+                "2": email,
+                "3": telefono,
+                "4": origen,
+                "5": destino,
+                "6": fecha
             })
         });
 
