@@ -1,4 +1,3 @@
-// routes/whatsapp.js (Manejo del envío de WhatsApp con Twilio)
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
@@ -18,7 +17,7 @@ router.post("/send-whatsapp", async (req, res) => {
         // Formatear el número con código internacional si no lo tiene
         let formattedPhone = telefono.startsWith("+") ? telefono : `+${telefono}`;
 
-        // Crear mensaje estructurado
+        // Mensaje estructurado
         const mensaje = `📌 Nueva Reserva:
 📛 Nombre: ${nombre}
 📧 Email: ${email}
@@ -29,16 +28,29 @@ router.post("/send-whatsapp", async (req, res) => {
 
         console.log(`📩 Enviando mensaje a: ${formattedPhone}`);
         
-        // Enviar mensaje a la persona que reservó
+        // Enviar mensaje al cliente usando la plantilla de Twilio
         const responseUser = await client.messages.create({
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
             to: `whatsapp:${formattedPhone}`,
-            body: `Hola ${nombre}, gracias por reservar con Visit Costa Rica US. Detalles:\n${mensaje}`,
+            template: {
+                name: "reserva_confirmada",
+                language: "es",
+                components: [
+                    { type: "body", parameters: [
+                        { type: "text", text: nombre },
+                        { type: "text", text: email },
+                        { type: "text", text: telefono },
+                        { type: "text", text: origen },
+                        { type: "text", text: destino },
+                        { type: "text", text: fecha }
+                    ]}
+                ]
+            }
         });
 
-        console.log(`✅ Mensaje enviado al cliente: ${responseUser.sid}`);
+        console.log(`✅ Mensaje de plantilla enviado al cliente: ${responseUser.sid}`);
 
-        // Enviar mensaje al administrador
+        // Enviar mensaje al administrador sin plantilla (dentro de la ventana de 24h)
         const responseAdmin = await client.messages.create({
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
             to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`,
