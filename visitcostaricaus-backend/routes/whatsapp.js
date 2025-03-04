@@ -17,8 +17,27 @@ router.post("/send-whatsapp", async (req, res) => {
         // Formatear el número con código internacional si no lo tiene
         let formattedPhone = telefono.startsWith("+") ? telefono : `+${telefono}`;
 
-        // Mensaje estructurado
-        const mensaje = `📌 Nueva Reserva:
+        console.log(`📩 Enviando mensaje a: ${formattedPhone}`);
+        
+        // Enviar mensaje al cliente usando la plantilla aprobada con content SID
+        const responseUser = await client.messages.create({
+            from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
+            to: `whatsapp:${formattedPhone}`,
+            contentSid: process.env.TWILIO_TEMPLATE_SID, // Asegurar que esta variable está en .env
+            contentVariables: JSON.stringify({
+                1: nombre,
+                2: email,
+                3: telefono,
+                4: origen,
+                5: destino,
+                6: fecha
+            })
+        });
+
+        console.log(`✅ Mensaje de plantilla enviado al cliente: ${responseUser.sid}`);
+
+        // Enviar mensaje al administrador (esto no necesita plantilla)
+        const mensajeAdmin = `🔔 Nueva reserva recibida:\n
 📛 Nombre: ${nombre}
 📧 Email: ${email}
 📱 Teléfono: ${telefono}
@@ -26,35 +45,10 @@ router.post("/send-whatsapp", async (req, res) => {
 🌆 Destino: ${destino}
 📅 Fecha: ${fecha}`;
 
-        console.log(`📩 Enviando mensaje a: ${formattedPhone}`);
-        
-        // Enviar mensaje al cliente usando la plantilla de Twilio
-        const responseUser = await client.messages.create({
-            from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
-            to: `whatsapp:${formattedPhone}`,
-            template: {
-                name: "reserva_confirmada",
-                language: "es",
-                components: [
-                    { type: "body", parameters: [
-                        { type: "text", text: nombre },
-                        { type: "text", text: email },
-                        { type: "text", text: telefono },
-                        { type: "text", text: origen },
-                        { type: "text", text: destino },
-                        { type: "text", text: fecha }
-                    ]}
-                ]
-            }
-        });
-
-        console.log(`✅ Mensaje de plantilla enviado al cliente: ${responseUser.sid}`);
-
-        // Enviar mensaje al administrador sin plantilla (dentro de la ventana de 24h)
         const responseAdmin = await client.messages.create({
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
             to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`,
-            body: `🔔 Nueva reserva recibida:\n${mensaje}`,
+            body: mensajeAdmin
         });
 
         console.log(`✅ Mensaje enviado al administrador: ${responseAdmin.sid}`);
