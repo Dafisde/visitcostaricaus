@@ -1,10 +1,8 @@
-// routes/whatsapp.js - Manejo del envío de WhatsApp con Twilio
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const twilio = require("twilio");
 
-// Inicializar cliente de Twilio
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 router.post("/send-whatsapp", async (req, res) => {
@@ -16,24 +14,24 @@ router.post("/send-whatsapp", async (req, res) => {
             return res.status(400).json({ error: "Todos los campos son obligatorios." });
         }
 
-        // Verificar si las variables de entorno están correctamente configuradas
-        if (!process.env.TWILIO_TEMPLATE_SID || !process.env.TWILIO_MESSAGING_SERVICE_SID) {
-            console.error("❌ Error: Variables de entorno TWILIO_TEMPLATE_SID o TWILIO_MESSAGING_SERVICE_SID no definidas.");
+        // Verificar si TWILIO_TEMPLATE_SID está definido
+        if (!process.env.TWILIO_TEMPLATE_SID) {
+            console.error("❌ TWILIO_TEMPLATE_SID no está definido en .env");
             return res.status(500).json({ error: "Error de configuración en el servidor." });
         }
 
         // Formatear el número con código internacional si no lo tiene
         let formattedPhone = telefono.startsWith("+") ? telefono : `+${telefono}`;
 
-        console.log(`📩 Enviando mensaje a Cliente: ${formattedPhone}`);
+        console.log(`📩 Enviando mensaje a: ${formattedPhone}`);
         console.log(`🔹 Usando plantilla: ${process.env.TWILIO_TEMPLATE_SID}`);
 
-        // Enviar mensaje al cliente usando la plantilla aprobada en Twilio
+        // Enviar mensaje al cliente usando la plantilla aprobada
         const responseUser = await client.messages.create({
-            messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+            messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID, // ID del servicio de mensajería en Twilio
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
             to: `whatsapp:${formattedPhone}`,
-            contentSid: process.env.TWILIO_TEMPLATE_SID,
+            contentSid: process.env.TWILIO_TEMPLATE_SID, // Asegurar que esta variable está en .env
             contentVariables: JSON.stringify({
                 "1": nombre,
                 "2": email,
@@ -46,15 +44,7 @@ router.post("/send-whatsapp", async (req, res) => {
 
         console.log(`✅ Mensaje de plantilla enviado al cliente: ${responseUser.sid}`);
 
-        // Verificar si el número del administrador está definido en .env
-        if (!process.env.ADMIN_PHONE_NUMBER) {
-            console.error("❌ Error: ADMIN_PHONE_NUMBER no está definido en .env");
-            return res.status(500).json({ error: "Número de administrador no configurado." });
-        }
-
-        console.log(`📩 Enviando mensaje al Administrador: ${process.env.ADMIN_PHONE_NUMBER}`);
-
-        // Crear mensaje de notificación para el administrador
+        // Enviar mensaje al administrador (esto no necesita plantilla)
         const mensajeAdmin = `🔔 Nueva reserva recibida:\n
 📛 Nombre: ${nombre}
 📧 Email: ${email}
@@ -74,11 +64,6 @@ router.post("/send-whatsapp", async (req, res) => {
         res.status(200).json({ success: "Mensajes enviados correctamente." });
     } catch (error) {
         console.error("❌ Error enviando WhatsApp:", error);
-
-        if (error.code === 63016) {
-            return res.status(500).json({ error: "Error 63016: El mensaje debe usar una plantilla aprobada de Twilio." });
-        }
-
         res.status(500).json({ error: "Error enviando el mensaje." });
     }
 });
