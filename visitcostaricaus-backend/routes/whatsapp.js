@@ -16,19 +16,19 @@ router.post("/send-whatsapp", async (req, res) => {
             return res.status(400).json({ error: "Todos los campos son obligatorios." });
         }
 
-        // Verificar si las variables de entorno están correctamente configuradas
-        if (!process.env.TWILIO_TEMPLATE_SID || !process.env.TWILIO_MESSAGING_SERVICE_SID) {
-            console.error("❌ Error: Variables de entorno TWILIO_TEMPLATE_SID o TWILIO_MESSAGING_SERVICE_SID no definidas.");
+        // Verificar que las variables de entorno están configuradas correctamente
+        if (!process.env.TWILIO_TEMPLATE_SID || !process.env.TWILIO_MESSAGING_SERVICE_SID || !process.env.TWILIO_ADMIN_TEMPLATE_SID) {
+            console.error("❌ Error: Variables de entorno TWILIO_TEMPLATE_SID, TWILIO_ADMIN_TEMPLATE_SID o TWILIO_MESSAGING_SERVICE_SID no definidas.");
             return res.status(500).json({ error: "Error de configuración en el servidor." });
         }
 
-        // Formatear el número con código internacional si no lo tiene
+        // Formatear el número del cliente con código internacional si no lo tiene
         let formattedPhone = telefono.startsWith("+") ? telefono : `+${telefono}`;
 
         console.log(`📩 Enviando mensaje a Cliente: ${formattedPhone}`);
-        console.log(`🔹 Usando plantilla: ${process.env.TWILIO_TEMPLATE_SID}`);
+        console.log(`🔹 Usando plantilla de cliente: ${process.env.TWILIO_TEMPLATE_SID}`);
 
-        // Enviar mensaje al cliente usando la plantilla aprobada en Twilio
+        // Enviar mensaje al cliente usando la plantilla aprobada
         const responseUser = await client.messages.create({
             messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
@@ -53,23 +53,25 @@ router.post("/send-whatsapp", async (req, res) => {
         }
 
         console.log(`📩 Enviando mensaje al Administrador: ${process.env.ADMIN_PHONE_NUMBER}`);
+        console.log(`🔹 Usando plantilla de administrador: ${process.env.TWILIO_ADMIN_TEMPLATE_SID}`);
 
-        // Crear mensaje de notificación para el administrador
-        const mensajeAdmin = `🔔 Nueva reserva recibida:\n
-📛 Nombre: ${nombre}
-📧 Email: ${email}
-📱 Teléfono: ${telefono}
-🚍 Origen: ${origen}
-🌆 Destino: ${destino}
-📅 Fecha: ${fecha}`;
-
+        // Enviar mensaje al administrador usando la plantilla aprobada
         const responseAdmin = await client.messages.create({
+            messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
             from: `whatsapp:${process.env.TWILIO_PHONE_NUMBER}`,
             to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`,
-            body: mensajeAdmin
+            contentSid: process.env.TWILIO_ADMIN_TEMPLATE_SID,
+            contentVariables: JSON.stringify({
+                "1": nombre,
+                "2": email,
+                "3": telefono,
+                "4": origen,
+                "5": destino,
+                "6": fecha
+            })
         });
 
-        console.log(`✅ Mensaje enviado al administrador: ${responseAdmin.sid}`);
+        console.log(`✅ Mensaje de plantilla enviado al administrador: ${responseAdmin.sid}`);
 
         res.status(200).json({ success: "Mensajes enviados correctamente." });
     } catch (error) {
